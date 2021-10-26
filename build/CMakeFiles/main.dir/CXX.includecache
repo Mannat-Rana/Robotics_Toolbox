@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.hpp
+eigen3/Eigen/Dense
+-
+iostream
+-
+math.h
+-
+
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/main.cpp
+RoboticsToolbox.hpp
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.hpp
+
