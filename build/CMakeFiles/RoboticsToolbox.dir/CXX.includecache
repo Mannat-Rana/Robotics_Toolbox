@@ -17,4 +17,8 @@ iostream
 -
 math.h
 -
+string
+-
+vector
+-
 

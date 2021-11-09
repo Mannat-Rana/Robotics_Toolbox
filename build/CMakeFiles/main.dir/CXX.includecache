@@ -13,6 +13,10 @@ iostream
 -
 math.h
 -
+string
+-
+vector
+-
 
 /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/main.cpp
 RoboticsToolbox.hpp
