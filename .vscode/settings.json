@@ -62,6 +62,10 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "bit": "cpp"
+<<<<<<< HEAD
     },
     "ros.distro": "noetic"
+=======
+    }
+>>>>>>> 74e2b7febd44202522e98b9db1e79766b7039831
 }
