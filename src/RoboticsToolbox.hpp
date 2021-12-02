@@ -31,8 +31,8 @@ namespace rt
     /**
      * Solves for a system's DOF with Grubler's formula.
      * 
-     * @param M is either 3 or 6 depending on whether
-     *      the system is planar or spacial.
+     * @param m is either 3 or 6 depending on whether
+     *      the system is planar or spatial.
      * @param N is the number of links including the 
      *      ground.
      * @param J is the number of joints in the system.
@@ -43,7 +43,7 @@ namespace rt
      * 
      * @exceptsafe This function does not throw exceptions.
      */
-    int getDOF(int M, int N, int J, const std::vector<int>& fi);
+    int getDOF(int m, int N, int J, const std::vector<int>& fi);
    
     enum Axes
     {
@@ -112,7 +112,7 @@ namespace rt
     }
 
     struct DHParams 
-    {
+    {   // Double for each DH Parameter
         double alpha;
         double a;
         double theta;
@@ -146,7 +146,7 @@ namespace rt
             Link(const std::string& name);
 
             /**
-             * Construct a new Link object with DH Paramaters and a name
+             * Construct a new Link object with DH Parameters and a name
              * 
              * @param params the DH Parameters for the link 
              * @param name the name for the link
@@ -232,9 +232,9 @@ namespace rt
              * Get the Homogenous Transform for the link
              * 
              * @return the homogeneous transformation matrix 
-             *      for the link 
+             *      for the link using DH Parameters 
              */
-            homogenousTransform_t getHomogenousTransform() const;
+            homogenousTransform_t getHomogeneousTransform() const;
     };
     class Revolute : public Link
     {

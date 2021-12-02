@@ -3,7 +3,7 @@
  * @author Mannat Rana (mrana8@asu.edu)
  *         Benjamin Levine (blevine3@asu.edu)
  *         Olivia Pinkowski (opinkows@asu.edu)
- * @brief Header File for C++ Robotics Toolbox Implementation
+ * @brief CPP File for C++ Robotics Toolbox Implementation
  *        Written for MAE 547 - Modelling and Control of Robots
  *        Taught by Dr. Hyunglae Lee at Arizona State University
  * @version 0.1
@@ -16,7 +16,7 @@
 
 namespace rt
 {
-    int getDOF(int M, int N, int J, const std::vector<int>& fi)
+    int getDOF(int m, int N, int J, const std::vector<int>& fi)
     {
         if (fi.size() == 0)
         {
@@ -29,7 +29,7 @@ namespace rt
             DOF += f;
         }
         // Apply Grubler's Formula
-        DOF += M * (N - 1 - J);
+        DOF += m * (N - 1 - J);
         return DOF;
     }
 
@@ -53,9 +53,9 @@ namespace rt
             radianAngle_t angleInRad{ Geometry::convertDegToRad(angleInDeg) };
             rotationMatrix_t mat(3,3);
             try
-            {
+            {   // Check user's desired input axis
                 switch (axis)
-                {
+                { // Implement formulas for elementary rotations 
                 case Axes::axis_x:
                     mat(0,0) = 1; mat(0,1) = 0;               mat(0,2) = 0;
                     mat(1,0) = 0; mat(1,1) = cos(angleInRad); mat(1,2) = -sin(angleInRad);
@@ -78,7 +78,7 @@ namespace rt
                     throw "Illegal input, cannot compute rotation matrix. Returning identity matrix.";
                     break;
                 }
-            }
+            } // Catch in case illegal axis is inputted
             catch (const char* exception)
             {
                 std::cerr << "Error: " << exception << std::endl;
@@ -108,7 +108,8 @@ namespace rt
         std::cout << "Initialized link " << m_name << std::endl;
     }
 
-    Link::Link(const DHParams& params, const std::string& name) : m_params {params.alpha, params.a, params.theta, params.d}, m_name {name}
+    Link::Link(const DHParams& params, const std::string& name) :
+     m_params {params.alpha, params.a, params.theta, params.d}, m_name {name}
     {
         // Full constructor
         std::cout << "Initialized link " << m_name << std::endl;
@@ -171,7 +172,7 @@ namespace rt
 
     void Link::printDHTable() const
     {
-        std::cout << "\n\t\t\t\t" << getName() << std::endl;
+        std::cout << "\n\t\t" << "DH Table for " << getName() << std::endl;
         std::cout << "|\talpha\t|\ta\t|\ttheta\t|\td\t|" << std::endl;
         std::cout << "|\t" << getAlpha() << "\t|";
         std::cout << "\t" << getA() << "\t|";
@@ -179,11 +180,13 @@ namespace rt
         std::cout << "\t" << getD() << "\t|" << std::endl;
     }
 
-    homogenousTransform_t Link::getHomogenousTransform() const
+    homogenousTransform_t Link::getHomogeneousTransform() const
     {
         homogenousTransform_t transform;
+        // Convert theta and alpha to radians
         radianAngle_t alphaInRad = rt::Geometry::convertDegToRad(getAlpha());
         radianAngle_t thetaInRad = rt::Geometry::convertDegToRad(getTheta());
+        // Apply homogeneous transformation formula using DH Parameters
         transform(0,0) = cos(thetaInRad);
         transform(1,0) = sin(thetaInRad);
         transform(2,0) = 0;
@@ -218,7 +221,8 @@ namespace rt
         // Name only constructor
     }
 
-    Revolute::Revolute(const DHParams& params, const std::string& name) : m_type {rt::LinkType::type_revolute}, Link::Link(params, name) 
+    Revolute::Revolute(const DHParams& params, const std::string& name) :
+     m_type {rt::LinkType::type_revolute}, Link::Link(params, name) 
     {
         // Full constructor
     }
@@ -252,7 +256,8 @@ namespace rt
         // Name only constructor
     }
 
-    Prismatic::Prismatic(const DHParams& params, const std::string& name) : m_type {rt::LinkType::type_prismatic}, Link::Link(params, name) 
+    Prismatic::Prismatic(const DHParams& params, const std::string& name) :
+     m_type {rt::LinkType::type_prismatic}, Link::Link(params, name) 
     {
         // Full constructor
     }
@@ -290,10 +295,12 @@ namespace rt
         std::cout << "Creating robot named " << m_name << std::endl;
     }
 
-    Robot::Robot(const std::vector<Link>& links, const std::string& name) : m_links {links}, m_name {name} 
+    Robot::Robot(const std::vector<Link>& links, const std::string& name) :
+     m_links {links}, m_name {name} 
     {
         // Complete constructor
-        std::cout << "Creating robot named " << m_name << " with " << m_links.size() << " links" << std::endl;
+        std::cout << "Creating robot named " << m_name << " with " <<
+         m_links.size() << " links" << std::endl;
     }
 
     std::string Robot::getName() const 
@@ -329,14 +336,14 @@ namespace rt
         // Loop through links while multiplying their homogeneous transformation
         for (auto link : m_links)
         {
-            fKine *= link.getHomogenousTransform(); 
+            fKine *= link.getHomogeneousTransform(); 
         }
         return fKine;
     }
 
     void Robot::printDHTable() const
     {   
-        std::cout << "DH Table for " << getName() << std::endl;
+        std::cout << "\n\t\t\t\tDH Table for " << getName() << std::endl;
         std::cout << "|\tLink Frame\t|     alpha\t|\ta\t|      theta\t|\td\t|" << std::endl;
         int link_counter { 1 };
         for (auto link : m_links)
