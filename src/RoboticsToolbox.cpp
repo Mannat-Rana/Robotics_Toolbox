@@ -56,19 +56,19 @@ namespace rt
             {   // Check user's desired input axis
                 switch (axis)
                 { // Implement formulas for elementary rotations 
-                case Axes::axis_x:
+                case Axes::x:
                     mat(0,0) = 1; mat(0,1) = 0;               mat(0,2) = 0;
                     mat(1,0) = 0; mat(1,1) = cos(angleInRad); mat(1,2) = -sin(angleInRad);
                     mat(2,0) = 0; mat(2,1) = sin(angleInRad); mat(2,2) = cos(angleInRad);
                     return mat;
                     break;
-                case Axes::axis_y:
+                case Axes::y:
                     mat(0,0) = cos(angleInRad);  mat(0,1) = 0; mat(0,2) = sin(angleInRad);
                     mat(1,0) = 1;                mat(1,1) = 1; mat(1,2) = 0;
                     mat(2,0) = -sin(angleInRad); mat(2,1) = 0; mat(2,2) = cos(angleInRad);
                     return mat;
                     break;
-                case Axes::axis_z:
+                case Axes::z:
                     mat(0,0) = cos(angleInRad); mat(0,1) = -sin(angleInRad); mat(0,2) = 0;
                     mat(1,0) = sin(angleInRad); mat(1,1) = cos(angleInRad);  mat(1,2) = 0;
                     mat(2,0) = 0;               mat(2,1) = 0;                mat(2,2) = 1;
@@ -90,30 +90,31 @@ namespace rt
         }
     }
 
-    Link::Link() : m_params {0, 0, 0, 0}, m_name {"noname"} 
-    {
-        // Empty constructor
-        std::cout << "Initialized link " << m_name << std::endl;
-    }
-    
-    Link::Link(const DHParams& params) : m_params {params.alpha, params.a, params.theta, params.d}, m_name {"noname"} 
-    {
-        // DH only constructor
-        std::cout << "Initialized link " << m_name << std::endl;
-    }
-
-    Link::Link(const std::string& name) : m_params {0, 0, 0, 0}, m_name {name} 
-    {
-        // Name only constructor
-        std::cout << "Initialized link " << m_name << std::endl;
-    }
-
     Link::Link(const DHParams& params, const std::string& name) :
      m_params {params.alpha, params.a, params.theta, params.d}, m_name {name}
     {
         // Full constructor
-        std::cout << "Initialized link " << m_name << std::endl;
     }
+    
+    Link::Link(const DHParams& params) : Link(params, "unnamed link") 
+    {
+        // DH only constructor
+    }
+
+    Link::Link(const std::string& name) : Link({0,0,0,0}, name)
+    {
+        // Name only constructor
+    }
+
+    Link::Link() : Link({0,0,0,0}, "unnamed link")
+    {
+        // Empty constructor
+    }
+
+    Link::Link(const Link& l) : Link(l.m_params, l.m_name)
+    {
+        // Copy constructor
+    } 
   
     void Link::setAlpha(const double alpha) 
     { 
@@ -172,7 +173,6 @@ namespace rt
 
     void Link::printDHTable() const
     {
-        std::cout << "\n\t\t" << "DH Table for " << getName() << std::endl;
         std::cout << "|\talpha\t|\ta\t|\ttheta\t|\td\t|" << std::endl;
         std::cout << "|\t" << getAlpha() << "\t|";
         std::cout << "\t" << getA() << "\t|";
@@ -206,63 +206,71 @@ namespace rt
         return transform;
     }
 
-    Revolute::Revolute() : m_type {rt::LinkType::type_revolute}, Link()  
+    void Link::print(std::ostream& out) const {
+        out << "Transformation: \n" << getHomogeneousTransform();
+    }
+ 
+    Link::~Link() = default;
+
+    Revolute::Revolute(const DHParams& params, const std::string& name) : Link::Link(params, name) 
     {
-        // Empty constructor
+        // Full constructor
     }
 
-    Revolute::Revolute(const DHParams& params) : m_type {rt::LinkType::type_revolute}, Link::Link(params)  
+    Revolute::Revolute(const DHParams& params) : Link::Link(params)  
     {
         // DH Only constructor
     }
 
-    Revolute::Revolute(const std::string& name) : m_type {rt::LinkType::type_revolute}, Link::Link(name) 
+    Revolute::Revolute(const std::string& name) : Link::Link(name) 
     {
         // Name only constructor
     }
 
-    Revolute::Revolute(const DHParams& params, const std::string& name) :
-     m_type {rt::LinkType::type_revolute}, Link::Link(params, name) 
-    {
-        // Full constructor
-    }
-
-    Revolute::Revolute(const Link& link) : m_type {rt::LinkType::type_revolute} , Link::Link(link) 
-    {
-        // Constructor to convert regular link to revolute
-    } 
-    void Revolute::printDHTable() const
-    {
-        std::cout << "\n\t\t\tRevolute: " << getName() << std::endl;
-        std::cout << "|\talpha\t|\ta\t|\ttheta\t|\td\t|" << std::endl;
-        std::cout << "|\t" << getAlpha() << "\t|";
-        std::cout << "\t" << getA() << "\t|";
-        std::cout << "\t" << getTheta() << "\t|";
-        std::cout << "\t" << getD() << "\t|" << std::endl;
-    }
-
-    Prismatic::Prismatic() : m_type {rt::LinkType::type_revolute}, Link() 
+    Revolute::Revolute() : Link::Link()  
     {
         // Empty constructor
     }
 
-    Prismatic::Prismatic(const DHParams& params) : m_type {rt::LinkType::type_prismatic}, Link::Link(params)  
+    Revolute::Revolute(const Revolute& r) : Link::Link(r) 
     {
-        // DH only constructor
+        // Copy constructor
+    } 
+
+    void Revolute::printDHTable() const
+    {
+        std::cout << "\n\t\t\tRevolute: " << getName() << std::endl;
+        Link::printDHTable();
     }
 
-    Prismatic::Prismatic(const std::string& name) : m_type {rt::LinkType::type_prismatic}, Link::Link(name) 
-    {
-        // Name only constructor
+    void Revolute::print(std::ostream& out) const {
+        out << "Revolute Joint named: " << getName() << std::endl;
+        Link::print(out);
     }
 
-    Prismatic::Prismatic(const DHParams& params, const std::string& name) :
-     m_type {rt::LinkType::type_prismatic}, Link::Link(params, name) 
+    Revolute::~Revolute() = default;
+
+    Prismatic::Prismatic(const DHParams& params, const std::string& name) : Link::Link(params, name) 
     {
         // Full constructor
     }
 
-    Prismatic::Prismatic(const Link& link) : m_type {rt::LinkType::type_prismatic} , Link::Link(link) 
+    Prismatic::Prismatic(const DHParams& params) : Link::Link(params)  
+    {
+        // DH only constructor
+    }
+
+    Prismatic::Prismatic(const std::string& name) : Link::Link(name) 
+    {
+        // Name only constructor
+    }
+
+    Prismatic::Prismatic() : Link::Link() 
+    {
+        // Empty constructor
+    }
+
+    Prismatic::Prismatic(const Prismatic& p) : Link::Link(p) 
     {
         // Constructor to convert regular link to prismatic
     } 
@@ -270,37 +278,37 @@ namespace rt
     void Prismatic::printDHTable() const
     {
         std::cout << "\n\t\t\tPrismatic: " << getName() << std::endl;
-        std::cout << "|\talpha\t|\ta\t|\ttheta\t|\td\t|" << std::endl;
-        std::cout << "|\t" << getAlpha() << "\t|";
-        std::cout << "\t" << getA() << "\t|";
-        std::cout << "\t" << getTheta() << "\t|";
-        std::cout << "\t" << getD() << "\t|" << std::endl;
+        Link::printDHTable();
     }
 
-    Robot::Robot() : m_name {"noname"} 
-    {
-        // Empty constructor
-        std::cout << "Creating empty robot with name " << m_name << std::endl;
+    void Prismatic::print(std::ostream& out) const {
+        out << "Prismatic Joint named: " << getName() << std::endl;
+        Link::print(out);
     }
 
-    Robot::Robot(const std::vector<Link>& links) : m_links {links}, m_name {"noname"} 
-    {
-        // Link vector only constructor
-        std::cout << "Creating robot with " << m_links.size() << " links" << std::endl;
-    }
+    Prismatic::~Prismatic() = default;
 
-    Robot::Robot(const std::string& name) : m_name {name} 
-    {
-        // Name only constructor
-        std::cout << "Creating robot named " << m_name << std::endl;
-    }
-
-    Robot::Robot(const std::vector<Link>& links, const std::string& name) :
-     m_links {links}, m_name {name} 
+    Robot::Robot(const std::vector<std::shared_ptr<Link>>& links, const std::string& name) : m_name {name}, m_links{links} 
     {
         // Complete constructor
         std::cout << "Creating robot named " << m_name << " with " <<
-         m_links.size() << " links" << std::endl;
+        m_links.size() << " links" << std::endl;
+    }
+
+    Robot::Robot(const std::vector<std::shared_ptr<Link>>& links) : Robot(m_links, "unnamed robot")
+    {
+        // Link vector only constructor
+    }
+
+    Robot::Robot(const std::string& name) : m_name {name}, m_links{}
+    {
+        // Name only constructor
+        std::cout << "Creating empty robot named " << m_name << std::endl;
+    }
+
+    Robot::Robot() : Robot("unnamed robot") 
+    {
+        // Empty constructor
     }
 
     std::string Robot::getName() const 
@@ -318,7 +326,7 @@ namespace rt
         m_name = name; 
     }
 
-    void Robot::addLink(const Link& link, const int position) 
+    void Robot::addLink(std::shared_ptr<Link> link, const int position) 
     { 
         auto index { m_links.begin() + position - 1};
         m_links.insert(index, link); 
@@ -334,9 +342,9 @@ namespace rt
     {
         homogenousTransform_t fKine { Eigen::Matrix4d::Identity() };
         // Loop through links while multiplying their homogeneous transformation
-        for (auto link : m_links)
+        for (const auto& link : m_links)
         {
-            fKine *= link.getHomogeneousTransform(); 
+            fKine *= link->getHomogeneousTransform(); 
         }
         return fKine;
     }
@@ -346,13 +354,19 @@ namespace rt
         std::cout << "\n\t\t\t\tDH Table for " << getName() << std::endl;
         std::cout << "|\tLink Frame\t|     alpha\t|\ta\t|      theta\t|\td\t|" << std::endl;
         int link_counter { 1 };
-        for (auto link : m_links)
+        for (const auto& link : m_links)
         {
             std::cout << "|\t    " << link_counter++ << "\t\t|";
-            std::cout << "\t" << link.getAlpha() << "\t|";
-            std::cout << "\t" << link.getA() << "\t|";
-            std::cout << "\t" << link.getTheta() << "\t|";
-            std::cout << "\t" << link.getD() << "\t|" << std::endl;
+            std::cout << "\t" << link->getAlpha() << "\t|";
+            std::cout << "\t" << link->getA() << "\t|";
+            std::cout << "\t" << link->getTheta() << "\t|";
+            std::cout << "\t" << link->getD() << "\t|" << std::endl;
         }
     }
+
+    void Robot::print(std::ostream& out) const {
+        out << "Robot named: " << getName() << " with " << m_links.size() << " links." << std::endl;
+    }
+
+    Robot::~Robot() = default;
 }

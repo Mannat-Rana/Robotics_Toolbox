@@ -9,46 +9,28 @@ int main()
     // Generate Elementary Rotation Matrices
     // Rx(30), Ry(45), Rz(60)
     std::cout << std::endl << "Rx(30):" << std::endl;
-    std::cout << rt::Transforms::getRotationMatrix(rt::axis_x, 30) << std::endl;
+    std::cout << rt::Transforms::getRotationMatrix(rt::x, 30) << std::endl;
     std::cout << std::endl << "Ry(45):" << std::endl;
-    std::cout << rt::Transforms::getRotationMatrix(rt::axis_y, 45) << std::endl;
+    std::cout << rt::Transforms::getRotationMatrix(rt::y, 45) << std::endl;
     std::cout << std::endl << "Rz(60):" << std::endl;
-    std::cout << rt::Transforms::getRotationMatrix(rt::axis_z, 60) << std::endl;
+    std::cout << rt::Transforms::getRotationMatrix(rt::z, 60) << std::endl;
     
-    // Generate Link with following DH Parameters:
+    // Generate Revolute Joint with following DH Parameters:
     // alpha = -90, a = 0, theta = 30, d = 0
     std::cout << std::endl;
     rt::DHParams exampleParams {-90, 0, 30, 0};
-    rt::Link exampleLink {exampleParams, std::string {"Example Link"}};
-    exampleLink.printDHTable();
+    rt::Revolute exampleRevolute {exampleParams, std::string {"Example Revolute"}};
+    exampleRevolute.printDHTable();
 
     // Solve Homogeneous Transformation from DH Parameters
     std::cout << std::endl << "Corresponding Homogeneous Transformation: " << std::endl;
-    std::cout << exampleLink.getHomogeneousTransform() << std::endl << std::endl;
+    std::cout << exampleRevolute.getHomogeneousTransform() << std::endl << std::endl;
 
-    // Create RRP Robot by defining links and combining them into robot
-    // to get forward kinematics A03
-    rt::DHParams paramsLink1 {-90, 0, 30, 0};
-    rt::DHParams paramsLink2 {90, 0, 45, 1};
-    rt::DHParams paramsLink3 {0, 0, 0, 1};
-    rt::Revolute link1 {paramsLink1, std::string {"Revolute 1"}};
-    rt::Revolute link2 {paramsLink2, std::string {"Revolute 2"}};
-    rt::Prismatic link3 {paramsLink3, std::string {"Prismatic 3"}};
-    rt::Robot exampleRobot {std::vector<rt::Link>{link1, link2, link3},
-                        std::string {"RRP Robot"}};
-    exampleRobot.printDHTable();
-    std::cout << std::endl << "Corresponding Forward Kinematics: " << std::endl;
-    std::cout << exampleRobot.getForwardKinematics() << std::endl << std::endl;
+    // Print Revolute Joint directly
+    std::cout << exampleRevolute << std::endl;
 
-    // Use ToolBox API to remove 3rd link and add new link 
-    // to make robot RRR instead of original RRP (rename)
-    rt::DHParams newParamsLink3 {0, 0, 90, 0};
-    rt::Revolute newLink3 {newParamsLink3, std::string {"Revolute 3"}};
-    exampleRobot.removeLink(3);
-    exampleRobot.addLink(newLink3, 3);
-    exampleRobot.setName(std::string {"RRR Robot"});
-    exampleRobot.printDHTable();
-    std::cout << std::endl << "Corresponding Forward Kinematics: " << std::endl;
-    std::cout << exampleRobot.getForwardKinematics() << std::endl;
-
+    std::vector<std::shared_ptr<rt::Link>> links {};
+    links.push_back(std::make_shared<rt::Revolute>(exampleRevolute));
+    rt::Robot exampleRobot {links, "Example Robot"};
+    std::cout << exampleRobot;
 }

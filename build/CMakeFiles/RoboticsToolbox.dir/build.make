@@ -60,15 +60,15 @@ include CMakeFiles/RoboticsToolbox.dir/flags.make
 CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o: CMakeFiles/RoboticsToolbox.dir/flags.make
 CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o: ../src/RoboticsToolbox.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sikhdragon/Documents/C++/Robotics_Toolbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o -c /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp
+	/bin/x86_64-linux-gnu-g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o -c /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp
 
 CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp > CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.i
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp > CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.i
 
 CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp -o CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.s
+	/bin/x86_64-linux-gnu-g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp -o CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.s
 
 # Object files for target RoboticsToolbox
 RoboticsToolbox_OBJECTS = \

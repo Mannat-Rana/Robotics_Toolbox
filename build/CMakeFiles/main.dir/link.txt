@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/main.dir/src/main.cpp.o  -o main  libRoboticsToolbox.a 
+/bin/x86_64-linux-gnu-g++-9  -g  -rdynamic CMakeFiles/main.dir/src/main.cpp.o  -o main  libRoboticsToolbox.a libI_Print.a 

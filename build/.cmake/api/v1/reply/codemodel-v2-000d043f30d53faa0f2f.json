@@ -15,11 +15,12 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
-			"name" : "",
+			"name" : "Debug",
 			"projects" : 
 			[
 				{
@@ -31,7 +32,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -39,15 +41,22 @@
 			[
 				{
 					"directoryIndex" : 0,
+					"id" : "I_Print::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-I_Print-Debug-654a6c2adbf180729352.json",
+					"name" : "I_Print",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "RoboticsToolbox::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-RoboticsToolbox-bf52caec7e878779718b.json",
+					"jsonFile" : "target-RoboticsToolbox-Debug-1f4ec5c898181c09aee8.json",
 					"name" : "RoboticsToolbox",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-b91af40f6111a33f7b37.json",
+					"jsonFile" : "target-main-Debug-eae9f09d93e690a88ef3.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}

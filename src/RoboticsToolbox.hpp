@@ -19,6 +19,8 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <memory>
+#include "I_Print.hpp"
 
 //TYPE ALIASES HERE
 using rotationMatrix_t = Eigen::Matrix3d;
@@ -47,17 +49,15 @@ namespace rt
    
     enum Axes
     {
-        axis_x,
-        axis_y,
-        axis_z,
-        axis_count,
+        x,
+        y,
+        z,
     };
     
     enum LinkType
     {
-        type_revolute,
-        type_prismatic,
-        type_count,
+        revolute,
+        prismatic,
     };
 
     namespace Constants
@@ -119,17 +119,19 @@ namespace rt
         double d;
     };
     
-    class Link
+    class Link : public I_Print
     {
-        private:
+        protected:
             DHParams m_params;
             std::string m_name;
         public:   
             /**
-             * Construct a new Link object with no input parameters
+             * Construct a new Link object with DH Parameters and a name
              * 
+             * @param params the DH Parameters for the link 
+             * @param name the name for the link
              */
-            Link();
+            Link(const DHParams& params, const std::string& name);
 
             /**
              * Construct a new Link object with just DH Parameters
@@ -145,13 +147,18 @@ namespace rt
              */
             Link(const std::string& name);
 
-            /**
-             * Construct a new Link object with DH Parameters and a name
+             /**
+             * Construct a new Link object with no input parameters
              * 
-             * @param params the DH Parameters for the link 
-             * @param name the name for the link
              */
-            Link(const DHParams& params, const std::string& name);
+            Link();
+
+            /**
+             * @brief Construct a new Link object
+             * 
+             * @param l the link to be copied
+             */
+            Link(const Link& l);
 
             /**
              * Set the value for alpha for the link
@@ -226,7 +233,7 @@ namespace rt
              * Print the link's DH Table 
              * 
              */
-            virtual void printDHTable() const;
+            virtual void printDHTable() const = 0;
 
             /**
              * Get the Homogenous Transform for the link
@@ -235,17 +242,32 @@ namespace rt
              *      for the link using DH Parameters 
              */
             homogenousTransform_t getHomogeneousTransform() const;
+
+            /**
+             * @brief interface for generic print class 
+             * 
+             */
+            virtual void print(std::ostream&) const override;
+
+            /**
+             * @brief Destroy the Link object
+             * 
+             */
+            virtual ~Link();
     };
     class Revolute : public Link
     {
+        friend class Robot;
         private:
-            rt::LinkType m_type;
+            rt::LinkType m_type {rt::LinkType::revolute};
         public:
             /**
-             * Construct a new Revolute object with no input parameters
+             * Construct a new Revolute object with DH Parameters and a name
              * 
+             * @param params the DH Parameters for the revolute link
+             * @param name the name for the revolute link
              */
-            Revolute();
+            Revolute(const DHParams& params, const std::string& name);
 
             /**
              * Construct a new Revolute object with just DH Parameters
@@ -260,14 +282,12 @@ namespace rt
              * @param name the name for the revolute link
              */
             Revolute(const std::string& name);
-
+            
             /**
-             * Construct a new Revolute object with DH Parameters and a name
+             * Construct a new Revolute object with no input parameters
              * 
-             * @param params the DH Parameters for the revolute link
-             * @param name the name for the revolute link
              */
-            Revolute(const DHParams& params, const std::string& name);
+            Revolute();
 
             /**
              * Construct a new Revolute object with a link
@@ -275,25 +295,40 @@ namespace rt
              * @param link the link the revolute object should
              *      get its parameters from 
              */
-            Revolute(const Link& link);
+            Revolute(const Revolute& r);
 
             /**
              * Print the revolute joint's DH Table 
              * 
              */
-            virtual void printDHTable() const;
+            virtual void printDHTable() const override final;
+
+            /**
+             * @brief interface for generic print class
+             * 
+             */
+            virtual void print(std::ostream&) const override final;
+
+            /**
+             * @brief Destroy the Revolute object
+             * 
+             */
+            virtual ~Revolute();
     };
 
     class Prismatic : public Link
     {
+        friend class Robot;
         private:
-            rt::LinkType m_type;
+            rt::LinkType m_type {rt::LinkType::prismatic};
         public:
             /**
-             * Construct a new Prismatic object with no input parameters
+             * Construct a new Prismatic object with DH Parameters and a name
              * 
+             * @param params the DH Parameters for the prismatic link
+             * @param name the name for the prismatic link
              */
-            Prismatic();
+            Prismatic(const DHParams& params, const std::string& name);
 
             /**
              * Construct a new Prismatic object with just DH Parameters
@@ -310,12 +345,10 @@ namespace rt
             Prismatic(const std::string& name);
 
             /**
-             * Construct a new Prismatic object with DH Parameters and a name
+             * Construct a new Prismatic object with no input parameters
              * 
-             * @param params the DH Parameters for the prismatic link
-             * @param name the name for the prismatic link
              */
-            Prismatic(const DHParams& params, const std::string& name);
+            Prismatic();
 
             /**
              * Construct a new Prismatic object with a link
@@ -323,40 +356,32 @@ namespace rt
              * @param link the link the prismatic object should
              *      get its parameters from 
              */
-            Prismatic(const Link& link);
+            Prismatic(const Prismatic& p);
 
             /**
              * Print the prismatic joint's DH Table 
              * 
              */
-            virtual void printDHTable() const;
+            virtual void printDHTable() const override final;
+            
+            /**
+             * @brief interface for generic print class
+             * 
+             */
+            virtual void print(std::ostream&) const override final;
+
+            /**
+             * @brief Destroy the Prismatic object
+             * 
+             */
+            virtual ~Prismatic();
     };
-    class Robot
+    class Robot : public I_Print
     {
         private:
-            std::vector<Link> m_links;
+            std::vector<std::shared_ptr<Link>> m_links;
             std::string m_name;
         public:
-            /**
-             * Construct an empty Robot object
-             * 
-             */
-            Robot();
-
-            /**
-             * Construct a new Robot object with just a vector of links
-             * 
-             * @param links a vector of links in order for the robot 
-             */
-            Robot(const std::vector<Link>& links);
-
-            /**
-             * Construct a new Robot object with just a name
-             * 
-             * @param name the desired name for the robot
-             */
-            Robot(const std::string& name);
-
             /**
              * Construct a new Robot object with a vector of links
              *      and a name
@@ -364,8 +389,28 @@ namespace rt
              * @param links a vector of links in order for the robot 
              * @param name the desired name for the robot
              */
-            Robot(const std::vector<Link>& links, const std::string& name);
+            Robot(const std::vector<std::shared_ptr<Link>>& links, const std::string& name);
+
+            /**
+             * Construct a new Robot object with just a vector of links
+             * 
+             * @param links a vector of links in order for the robot 
+             */
+            Robot(const std::vector<std::shared_ptr<Link>>& links);
+
+            /**
+             * Construct a new Robot object with just a name
+             * 
+             * @param name the desired name for the robot
+             */
+            Robot(const std::string& name);
             
+             /**
+             * Construct an empty Robot object
+             * 
+             */
+            Robot();
+
             /**
              * Get the name of the robot
              * 
@@ -393,7 +438,7 @@ namespace rt
              * @param link the link that needs to be added to the robot 
              * @param position the position at which the link appears
              */
-            void addLink(const Link& link, const int position);
+            void addLink(std::shared_ptr<Link> link, const int position);
 
             /**
              * Remove a link from the robot 
@@ -415,5 +460,17 @@ namespace rt
              * 
              */
             void printDHTable() const;
+
+            /**
+             * @brief overloaded print function for generic print class
+             * 
+             */
+            virtual void print(std::ostream& out) const override final;
+
+            /**
+             * @brief Destroy the Robot object
+             * 
+             */
+            virtual ~Robot();
     };
 }

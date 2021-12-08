@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/I_Print.hpp
+iostream
+-
+
 /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.hpp
 eigen3/Eigen/Dense
 -
@@ -17,6 +21,10 @@ string
 -
 vector
 -
+memory
+-
+I_Print.hpp
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/I_Print.hpp
 
 /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/main.cpp
 RoboticsToolbox.hpp

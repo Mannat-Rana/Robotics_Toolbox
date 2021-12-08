@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/I_Print.hpp
+iostream
+-
+
 /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.cpp
 RoboticsToolbox.hpp
 /home/sikhdragon/Documents/C++/Robotics_Toolbox/src/RoboticsToolbox.hpp
@@ -21,4 +25,8 @@ string
 -
 vector
 -
+memory
+-
+I_Print.hpp
+/home/sikhdragon/Documents/C++/Robotics_Toolbox/src/I_Print.hpp
 
