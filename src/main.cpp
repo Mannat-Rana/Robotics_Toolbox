@@ -31,6 +31,8 @@ int main()
 
     std::vector<std::shared_ptr<rt::Link>> links {};
     links.push_back(std::make_shared<rt::Revolute>(exampleRevolute));
+    // links.push_back(std::make_shared<rt::Revolute>(exampleRevolute));
     rt::Robot exampleRobot {links, "Example Robot"};
     std::cout << exampleRobot;
+    std::cout << exampleRobot.getForwardKinematics() << std::endl;
 }
