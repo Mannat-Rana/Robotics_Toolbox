@@ -1,8 +1,6 @@
 /**
  * @file RoboticsToolbox.hpp
  * @author Mannat Rana (mrana8@asu.edu)
- *         Benjamin Levine (blevine3@asu.edu)
- *         Olivia Pinkowski (opinkows@asu.edu)
  * @brief Header File for C++ Robotics Toolbox Implementation
  *        Written for MAE 547 - Modelling and Control of Robots
  *        Taught by Dr. Hyunglae Lee at Arizona State University
