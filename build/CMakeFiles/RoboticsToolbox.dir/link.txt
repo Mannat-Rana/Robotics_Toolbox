@@ -1,2 +1,0 @@
-/bin/ar qc libRoboticsToolbox.a  CMakeFiles/RoboticsToolbox.dir/src/RoboticsToolbox.cpp.o
-/bin/ranlib libRoboticsToolbox.a

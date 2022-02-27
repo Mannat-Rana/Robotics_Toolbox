@@ -1,2 +1,0 @@
-/bin/ar qc libI_Print.a  CMakeFiles/I_Print.dir/src/I_Print.cpp.o
-/bin/ranlib libI_Print.a
