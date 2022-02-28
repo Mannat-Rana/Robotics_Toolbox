@@ -1,7 +1,7 @@
 # Robotics Toolbox For Serial Manipulators ![SHIELD](https://img.shields.io/badge/Project%20Status%3A-Ongoing-yellow?style=for-the-badge) ![c++](https://camo.githubusercontent.com/6301a47e098ea0b84260920a75b5a71f121c5a0b55965dff8ad80bd60db208c7/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d4325324225324226636f6c6f723d303035393943266c6f676f3d43253242253242266c6f676f436f6c6f723d464646464646266c6162656c3d)
 
 ## About
-The goal of this library is to enable computation of serial kinematics for robotic manipulators in C++. This library is developed as part of the fina project in the course MAE 547: Modelling and Control of Robots at Arizona State University.
+The goal of this library is to enable computation of serial kinematics for robotic manipulators in C++. This library is developed as part of the final project in the course MAE 547: Modelling and Control of Robots at Arizona State University.
 
 ## Capabilities
 
